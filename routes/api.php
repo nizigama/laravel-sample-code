@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\App\Authentication;
+use App\Http\Controllers\App\Products;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,4 +25,9 @@ Route::prefix("auth")->group(function () {
     Route::post("register", [Authentication::class, "register"]);
     Route::post("login", [Authentication::class, "signin"]);
     Route::get("logout", [Authentication::class, "logout"]);
+});
+
+Route::prefix("app")->group(function(){
+
+    Route::get("products", [Products::class, "index"]);
 });
