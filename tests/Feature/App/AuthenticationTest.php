@@ -24,7 +24,7 @@ class AuthenticationTest extends TestCase
 
     /** 
      * 
-     * This funciton tests that anyone can create an accoutnand get a valid bearer token
+     * This function tests that anyone can create an account and get a valid bearer token
      * used in accessing protected resources
      * 
      * @test
@@ -60,7 +60,7 @@ class AuthenticationTest extends TestCase
 
     /** 
      * 
-     * This funciton tests that anyone can create an accoutnand get a valid bearer token
+     * This function tests that an existing user can login and get a valid bearer token
      * used in accessing protected resources
      * 
      * @test
@@ -70,7 +70,9 @@ class AuthenticationTest extends TestCase
     {
         // arrange
         /** @var User */
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            "email" => "jedavy.n@gmail.com"
+        ]);
         $user->createToken("userAuthToken");
         $user->createToken("userAuthToken");
 
@@ -88,4 +90,19 @@ class AuthenticationTest extends TestCase
         $this->assertModelExists(PersonalAccessToken::findToken($response["token"]));
         $this->assertSame(1, $user->tokens()->count());
     }
+
+    // /**
+    //  * This function tests that a logged in user can logout, and delete all their tokens
+    //  * 
+    //  * @test
+    //  */
+    // public function logged_in_user_can_logout_deleting_all_their_tokens(): void {
+    //     // arrange
+
+
+    //     // act
+
+
+    //     // assert
+    // }
 }
