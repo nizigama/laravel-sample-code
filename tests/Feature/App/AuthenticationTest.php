@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\PersonalAccessToken;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 /**
@@ -91,18 +92,27 @@ class AuthenticationTest extends TestCase
         $this->assertSame(1, $user->tokens()->count());
     }
 
-    // /**
-    //  * This function tests that a logged in user can logout, and delete all their tokens
-    //  * 
-    //  * @test
-    //  */
-    // public function logged_in_user_can_logout_deleting_all_their_tokens(): void {
-    //     // arrange
+    /**
+     * This function tests that a logged in user can logout, and delete all their tokens
+     * 
+     * @test
+     */
+    public function logged_in_user_can_logout_deleting_all_their_tokens(): void
+    {
+        // arrange
+        $user = User::factory()->create([
+            "email" => "jedavy.n@gmail.com"
+        ]);
+        Sanctum::actingAs($user);
 
 
-    //     // act
+        // act
+        $response = $this->get("/api/auth/logout");
 
 
-    //     // assert
-    // }
+        // assert
+        $response->assertStatus(200);
+        $response->assertExactJson(["message" => "Logged out successfully"]);
+        $this->assertSame(0, $user->tokens()->count());
+    }
 }
