@@ -57,4 +57,35 @@ class AuthenticationTest extends TestCase
         $this->assertTrue(Hash::check($password, $user->password));
         $this->assertModelExists(PersonalAccessToken::findToken($response["token"]));
     }
+
+    /** 
+     * 
+     * This funciton tests that anyone can create an accoutnand get a valid bearer token
+     * used in accessing protected resources
+     * 
+     * @test
+     * 
+     */
+    public function existing_user_can_login(): void
+    {
+        // arrange
+        /** @var User */
+        $user = User::factory()->create();
+        $user->createToken("userAuthToken");
+        $user->createToken("userAuthToken");
+
+
+        // act
+        $response = $this->postJson("/api/auth/login", [
+            "email" => $user->email,
+            "password" => "password"
+        ]);
+
+
+        // assert
+        $response->assertStatus(200);
+        $response->assertJsonStructure(["token"]);
+        $this->assertModelExists(PersonalAccessToken::findToken($response["token"]));
+        $this->assertSame(1, $user->tokens()->count());
+    }
 }
