@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegistrationRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class Authentication extends Controller
 {
@@ -28,5 +29,11 @@ class Authentication extends Controller
 
         $token = AuthManagement::loginUser($request->user);
         return response()->json(["token" => $token]);
+    }
+
+    public function logout()
+    {
+        Auth::user()->tokens()->delete();
+        return response()->json(["message" => "Logged out successfully"]);
     }
 }
