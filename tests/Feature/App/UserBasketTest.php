@@ -94,7 +94,7 @@ class UserBasketTest extends TestCase
         $response->assertStatus(200);
         $response->assertExactJson(["message" => "Product successfully removed from the cart"]);
         $cartAddition = Basket::where([["userID", Auth::id()], ["productID", $productID], ["statusID", BasketStatusID::ADDED->value]])->first();
-        $cartRemoval = Basket::where([["userID", Auth::id()], ["productID", $productID], ["statusID", BasketStatusID::REMOVED->value]])->first();
+        $cartRemoval = Basket::where([["userID", Auth::id()], ["productID", $productID], ["statusID", BasketStatusID::REMOVED->value], ["siblingID", $record->id]])->first();
         $this->assertModelExists($cartAddition);
         $this->assertModelExists($cartRemoval);
         $this->assertCount(2, Basket::where("userID", Auth::id())->get());
