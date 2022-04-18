@@ -18,7 +18,14 @@ return new class extends Migration
             $table->unsignedBigInteger("userID");
             $table->unsignedBigInteger("productID");
             $table->unsignedBigInteger("statusID");
-            $table->integer("itemsCount")->default(1);
+            /** 
+             * 
+             * When adding a product to the cart this column will be null
+             * When removing a product from the cart, this column will reference the row that recorded the cart addition. Hence we'll be able to track which cart addition was removed by verifying if the addition record has removal reference
+             * For buying status, it's the same as removing but since the buy feature won't be implemented no need for saying more...
+             */
+            $table->unsignedBigInteger("siblingID")->nullable()->comment("This column helps in tracking the cart addition entry that was removed or bought afterwards.");
+            $table->integer("itemsCount")->nullable();
             $table->integer("created_at");
             $table->integer("updated_at");
 
@@ -31,6 +38,10 @@ return new class extends Migration
             ->onDelete("restrict");
 
             $table->foreign("statusID")->references("id")->on("BasketStatus")
+            ->onUpdate("cascade")
+            ->onDelete("restrict");
+
+            $table->foreign("siblingID")->references("id")->on("Basket")
             ->onUpdate("cascade")
             ->onDelete("restrict");
         });

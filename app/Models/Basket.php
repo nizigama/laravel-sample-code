@@ -10,5 +10,5 @@ class Basket extends Model
     use HasFactory;
     protected $table = "Basket";
     protected $dateFormat = "U";
-    protected $fillable = ["userID", "productID", "statusID", "itemsCount"];
+    protected $fillable = ["userID", "productID", "statusID", "siblingID", "itemsCount"];
 }
