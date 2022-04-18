@@ -31,5 +31,6 @@ Route::prefix("auth")->group(function () {
 Route::prefix("app")->group(function(){
 
     Route::get("products", [Products::class, "index"]);
-    Route::post("cart/add", [Cart::class, "addToCart"]);
+    Route::post("cart/add", [Cart::class, "addToCart"])->middleware("auth:sanctum");
+    Route::post("cart/remove/{recordID}", [Cart::class, "removeFromCart"])->whereNumber("recordID")->middleware("auth:sanctum");
 });

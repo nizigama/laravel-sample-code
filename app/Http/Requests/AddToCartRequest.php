@@ -34,7 +34,7 @@ class AddToCartRequest extends FormRequest
     }
 
     /**
-     * Validates the provided credentials and throws 'invalid credentials error'
+     * Validates that the provided productID references an existing product and it's not yet in the cart
      */
     public function withValidator(Validator $validator): void
     {
@@ -44,7 +44,7 @@ class AddToCartRequest extends FormRequest
             $validator->after(function (Validator $validator) use ($product) {
 
                 if (is_null($product)) {
-                    $validator->errors()->add('productID', 'No product found with ID');
+                    $validator->errors()->add('productID', 'No product found with that ID');
                     return;
                 }
             });
