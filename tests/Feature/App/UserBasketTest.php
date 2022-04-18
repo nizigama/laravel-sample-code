@@ -38,12 +38,13 @@ class UserBasketTest extends TestCase
             "title" => "bought"
         ]);
         $productID = Product::inRandomOrder()->first()->id;
-        $itemsCount = 1;
+        $itemsCount = 3;
 
 
         // act
         $response = $this->postJson("/api/app/cart/add", [
-            "productID" => $productID
+            "productID" => $productID,
+            "itemsCount" => $itemsCount
         ]);
 
 
