@@ -20,7 +20,7 @@ class BasketFactory extends Factory
     public function definition()
     {
         return [
-            "userID" => User::inRandomOrder()->first()->id,
+            "userID" => User::factory()->create(),
             "productID" => Product::inRandomOrder()->first()->id,
             "statusID" => BasketStatus::inRandomOrder()->first()->id,
             "itemsCount" => $this->faker->randomNumber()

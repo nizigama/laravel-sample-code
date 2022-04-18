@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enum\BasketStatusID;
 use App\Models\Basket;
 use App\Models\BasketStatus;
 use App\Models\Product;
@@ -18,8 +19,34 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        User::factory(10)->create();
-        Product::factory(98)->create();
+        $products = [
+            [
+              "name"=>"Pioneer DJ Mixer",
+              "price"=>699
+            ],
+            [
+              "name"=>"Roland Wave Sampler",
+              "price"=>485
+            ],
+            [
+              "name"=>"Reloop Headphone",
+              "price"=>159
+            ],
+            [
+              "name"=>"Rokit Monitor",
+              "price"=>189.9
+            ],
+            [
+              "name"=>"Fisherprice Baby Mixer",
+              "price"=>120
+            ]
+            ];
+        foreach($products as $product){
+            Product::factory()->create([
+                "name" => $product["name"],
+                "price" => $product["price"],
+            ]);
+        }
         BasketStatus::factory()->create([
             "title" => "added"
         ]);
@@ -29,6 +56,15 @@ class DatabaseSeeder extends Seeder
         BasketStatus::factory()->create([
             "title" => "bought"
         ]);
-        Basket::factory(38)->create();
+        Basket::factory(19)->create([
+            "statusID" => BasketStatusID::ADDED->value
+        ]);
+        Basket::factory(7)->create([
+            "siblingID" => Basket::where("statusID", BasketStatusID::ADDED->value)
+                ->whereNotIn("id", Basket::where("statusID", BasketStatusID::REMOVED->value)
+                    ->get("siblingID")->toArray())
+                ->inRandomOrder()->first()->id,
+            "statusID" => BasketStatusID::REMOVED->value
+        ]);
     }
 }
