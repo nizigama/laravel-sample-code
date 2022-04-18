@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\App\Authentication;
+use App\Http\Controllers\App\Cart;
 use App\Http\Controllers\App\Products;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,4 +31,5 @@ Route::prefix("auth")->group(function () {
 Route::prefix("app")->group(function(){
 
     Route::get("products", [Products::class, "index"]);
+    Route::post("cart/add", [Cart::class, "addToCart"]);
 });
